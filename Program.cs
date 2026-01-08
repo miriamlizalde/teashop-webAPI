@@ -115,7 +115,6 @@ class Program
 
         if (subOpcion == "Volver") return;
 
-        // Lógica de Alta
         int id = stock.Count + 1;
         string nombre = AnsiConsole.Ask<string>("Nombre del producto:");
         decimal precio = AnsiConsole.Ask<decimal>("Precio:");
@@ -131,7 +130,7 @@ class Program
         }
 
         TeashopManager.GuardarDatos (stock, "productos.json");
-        AnsiConsole.MarkupLine("[green]Producto guardado con éxito y persistido en JSON.[/]");
+        AnsiConsole.MarkupLine("[green]Producto guardado con éxito.[/]");
         Console.ReadKey();
     }
 
@@ -140,13 +139,13 @@ class Program
     {
         if (usuarioIdentificado == null)
         {
-            AnsiConsole.MarkupLine("[red]Debes iniciar sesión para ver tu zona privada.[/]");
+            AnsiConsole.MarkupLine("[red]Debes iniciar sesión para ver tu perfil.[/]");
         }
         else
         {
             AnsiConsole.MarkupLine($"[blue]Bienvenido a tu perfil, {usuarioIdentificado.Nombre}[/]");
             usuarioIdentificado.MostrarDetalles();
-            // Aquí se listarían los pedidos filtrados por usuarioIdentificado.Id
+    
         }
         Console.ReadKey();
     }
@@ -154,7 +153,6 @@ class Program
     static void Login()
     {
         string nombre = AnsiConsole.Ask<string>("Nombre de usuario:");
-        // Simulación rápida de registro/login
         usuarioIdentificado = usuarios.FirstOrDefault(u => u.Nombre == nombre);
         
         if (usuarioIdentificado == null)

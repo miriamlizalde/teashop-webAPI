@@ -19,7 +19,7 @@ namespace TeaShop.Utils
             }
         }
 
-        // --- FUNCIONALIDAD EXTRA: LOG DE ERRORES ---
+        // LOG DE ERRORES
         public static void GuardarLog(string mensajeError)
         {
             try
@@ -33,7 +33,7 @@ namespace TeaShop.Utils
             }
         }
 
-        // --- FUNCIONALIDAD EXTRA: GUARDAR DATOS EN JSON ---
+        // GUARDAR DATOS EN JSON
         public static void GuardarDatos<T>(List<T> datos, string nombreArchivo)
         {
             try
@@ -55,7 +55,7 @@ namespace TeaShop.Utils
             }
         }
 
-        // --- FUNCIONALIDAD EXTRA: CARGAR DATOS DE JSON ---
+        // CARGAR DATOS DE JSON 
         public static List<T> CargarDatos<T>(string nombreArchivo)
         {
             string ruta = Path.Combine(DATOS, nombreArchivo);
