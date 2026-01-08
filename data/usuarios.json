@@ -1,0 +1,12 @@
+[
+  {
+    "Id": 1,
+    "Nombre": "admin",
+    "Email": "admin@gmail.com",
+    "Password": "admin",
+    "FechaRegistro": "2026-01-08T11:48:41.763646+01:00",
+    "Saldo": 0,
+    "EsSocio": true,
+    "EsAdmin": true
+  }
+]
