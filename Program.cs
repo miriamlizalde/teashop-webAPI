@@ -131,6 +131,7 @@ class Program
                     "Dar de alta Comida",
                     "Dar de alta Usuario",
                     "Añadir Pedido a Usuario",
+                    "Añadir Saldo a Usuario",
                     "Ver Usuarios", 
                     "Volver" 
                     }));
@@ -154,6 +155,10 @@ class Program
                 TeashopManager.GuardarDatos(pedidos, "pedidos.json");
                 TeashopManager.GuardarDatos(usuarios, "usuarios.json");
                 break;
+            case "Añadir Saldo a Usuario":
+                Usuario.AñadirSaldo(usuarios);
+                TeashopManager.GuardarDatos(usuarios, "usuarios.json");
+                break;    
             case "Ver Usuarios":
                 ListaUsuarios();
                 break;

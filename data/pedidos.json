@@ -5,7 +5,6 @@
     "Fecha": "2026-01-09T18:10:14.307423+01:00",
     "PrecioTotal": 6.5500,
     "Estado": 0,
-    "EsRegalo": false,
     "ListaProductos": [
       {
         "ProductoId": 6,
@@ -18,6 +17,36 @@
         "Nombre": "T\u00E9 Chai",
         "Cantidad": 10,
         "Precio": 32.00
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "UsuarioId": 4,
+    "Fecha": "2026-01-09T19:40:02.617021+01:00",
+    "PrecioTotal": 15.15,
+    "Estado": 0,
+    "ListaProductos": [
+      {
+        "ProductoId": 1,
+        "Nombre": "T\u00E9 Matcha",
+        "Cantidad": 300,
+        "Precio": 50.5
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "UsuarioId": 4,
+    "Fecha": "2026-01-09T19:45:14.140879+01:00",
+    "PrecioTotal": 10.00,
+    "Estado": 0,
+    "ListaProductos": [
+      {
+        "ProductoId": 5,
+        "Nombre": "Tarta de Pistacho",
+        "Cantidad": 400,
+        "Precio": 25.0
       }
     ]
   }

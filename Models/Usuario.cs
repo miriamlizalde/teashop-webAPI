@@ -35,16 +35,44 @@ namespace TeaShop.Models
 
         public static void NuevoUsuario(List<Usuario> usuarios)
         {
-            AnsiConsole.MarkupLine("[bold blue]--REGISTRAR USUARIO--[/]");
+            AnsiConsole.MarkupLine("[bold blue]-- REGISTRAR USUARIO --[/]");
             int id = usuarios.Any() ? usuarios.Max(u => u.Id) + 1 : 1;
 
-            string nombre = AnsiConsole.Ask<string>("Nombre del usuario:");
+            string nombre = AnsiConsole.Ask<string>("Nombre del usuarioRecarga:");
             string email = AnsiConsole.Ask<string>("Email:");
             string password = AnsiConsole.Ask<string>("Contraseña:");
             bool esSocio = AnsiConsole.Confirm("¿Es socio?");
 
             usuarios.Add(new Usuario(id, nombre, email, password, esSocio));
             AnsiConsole.MarkupLine("[green]Usuario creado con éxito.[/]");
+        }
+
+        public static void AñadirSaldo(List<Usuario> ListaUsuarios)
+        {
+            AnsiConsole.MarkupLine("[bold blue]-- AÑADIR SALDO --[/]");
+            string nomUsuario = AnsiConsole.Ask<string>("Nombre del usuario:");
+            var usuarioRecarga = ListaUsuarios.FirstOrDefault(u => u.Nombre.Equals(nomUsuario, StringComparison.OrdinalIgnoreCase));
+
+           if (usuarioRecarga == null)
+            {
+                AnsiConsole.MarkupLine("[red]Usuario no encontrado.[/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"Usuario: [yellow]{usuarioRecarga.Nombre}[/] - Saldo actual: [yellow]${usuarioRecarga.Saldo:F2}E[/]");
+                decimal cantidad = AnsiConsole.Ask<decimal>("Cantidad a recargar:");
+
+                if (cantidad <= 0)
+                {
+                    AnsiConsole.MarkupLine("[red]La cantidad debe ser mayor que 0.[/]");
+                }
+                else
+                {
+                    usuarioRecarga.Saldo += cantidad;
+                    AnsiConsole.MarkupLine($"[green]Saldo actualizado. Nuevo saldo: ${usuarioRecarga.Saldo:F2}E[/]");
+                }
+            }
+            Console.ReadKey();
         }
     }
 }
