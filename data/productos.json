@@ -8,7 +8,7 @@
     "Precio": 50.5,
     "Stock": 1000,
     "EsOrganico": true,
-    "FechaCaducidad": "2026-07-08T11:48:41.629875+02:00"
+    "FechaCaducidad": "2026-07-09T18:45:10.704756+02:00"
   },
   {
     "$type": "Te",
@@ -19,99 +19,76 @@
     "Precio": 32.00,
     "Stock": 10000,
     "EsOrganico": false,
-    "FechaCaducidad": "2026-07-08T11:48:41.687621+02:00"
+    "FechaCaducidad": "2026-07-09T18:45:10.704927+02:00"
   },
   {
     "$type": "Te",
     "TipoHoja": "Rojo",
-    "Id": 2,
+    "Id": 3,
     "Nombre": "T\u00E9 Puerh",
     "Origen": "China",
     "Precio": 22.00,
     "Stock": 10000,
     "EsOrganico": false,
-    "FechaCaducidad": "2026-07-08T11:48:41.687626+02:00"
+    "FechaCaducidad": "2026-07-09T18:45:10.70493+02:00"
   },
   {
     "$type": "Te",
     "TipoHoja": "Azul",
-    "Id": 2,
+    "Id": 4,
     "Nombre": "T\u00E9 Oolong",
     "Origen": "China",
     "Precio": 45.00,
     "Stock": 1500,
     "EsOrganico": true,
-    "FechaCaducidad": "2026-07-08T11:48:41.687626+02:00"
+    "FechaCaducidad": "2026-07-09T18:45:10.70493+02:00"
   },
   {
     "$type": "Comida",
     "TipoComida": "Dulce",
-    "ContieneGluten": true,
-    "Id": 2,
-    "Nombre": "Tarta de Pistacho",
-    "Origen": "Espa\u00F1a",
-    "Precio": 5.0,
-    "Stock": 350,
-    "EsOrganico": false,
-    "FechaCaducidad": "2026-07-08T11:48:41.68776+02:00"
-  },
-  {
-    "$type": "Comida",
-    "TipoComida": "Dulce",
-    "ContieneGluten": false,
-    "Id": 4,
-    "Nombre": "Cookie de Avena",
-    "Origen": "Espa\u00F1a",
-    "Precio": 1.80,
-    "Stock": 50,
-    "EsOrganico": true,
-    "FechaCaducidad": "2026-07-08T11:48:41.687941+02:00"
-  },
-  {
-    "$type": "Comida",
-    "TipoComida": "Salado",
     "ContieneGluten": true,
     "Id": 5,
+    "Nombre": "Tarta de Pistacho",
+    "Origen": "Espa\u00F1a",
+    "Precio": 25.0,
+    "Stock": 5000,
+    "EsOrganico": false,
+    "FechaCaducidad": "2026-07-09T18:45:10.70507+02:00"
+  },
+  {
+    "$type": "Comida",
+    "TipoComida": "Dulce",
+    "ContieneGluten": false,
+    "Id": 6,
+    "Nombre": "Cookie de Avena",
+    "Origen": "Espa\u00F1a",
+    "Precio": 17.80,
+    "Stock": 2500,
+    "EsOrganico": true,
+    "FechaCaducidad": "2026-07-09T18:45:10.705199+02:00"
+  },
+  {
+    "$type": "Comida",
+    "TipoComida": "Salado",
+    "ContieneGluten": true,
+    "Id": 7,
     "Nombre": "S\u00E1ndwich Vegetal",
     "Origen": "Francia",
-    "Precio": 3.50,
-    "Stock": 80,
+    "Precio": 23.50,
+    "Stock": 2200,
     "EsOrganico": false,
-    "FechaCaducidad": "2026-07-08T11:48:41.687943+02:00"
+    "FechaCaducidad": "2026-07-09T18:45:10.7052+02:00"
   },
   {
     "$type": "Comida",
     "TipoComida": "Salado",
     "ContieneGluten": false,
-    "Id": 6,
+    "Id": 8,
     "Nombre": "Wrap de Pollo",
     "Origen": "Reino Unido",
-    "Precio": 2.20,
-    "Stock": 120,
+    "Precio": 20.20,
+    "Stock": 6400,
     "EsOrganico": true,
-    "FechaCaducidad": "2026-07-08T11:48:41.687943+02:00"
-  },
-  {
-    "$type": "Te",
-    "TipoHoja": "Verde",
-    "Id": 9,
-    "Nombre": "T\u00E9 Verde",
-    "Origen": "Importaci\u00F3n",
-    "Precio": 25.50,
-    "Stock": 1000,
-    "EsOrganico": true,
-    "FechaCaducidad": "2026-07-08T11:50:18.626417+02:00"
-  },
-  {
-    "$type": "Comida",
-    "TipoComida": "Reposteria",
-    "ContieneGluten": false,
-    "Id": 10,
-    "Nombre": "Cookie",
-    "Origen": "Local",
-    "Precio": 4.95,
-    "Stock": 50,
-    "EsOrganico": false,
-    "FechaCaducidad": "2026-07-08T11:50:45.439082+02:00"
+    "FechaCaducidad": "2026-07-09T18:45:10.705201+02:00"
   }
 ]

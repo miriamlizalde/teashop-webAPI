@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
+using Spectre.Console;
 
 namespace TeaShop.Models
 
@@ -52,6 +53,23 @@ namespace TeaShop.Models
             string organicoStatus = EsOrganico ? "Sí" : "No";
             Console.WriteLine($"Té: {Nombre} | Origen: {Origen} | Tipo de Hoja: {TipoHoja} | Precio: ${Precio} por kg | Stock: {Stock}g | Orgánico: {organicoStatus} | Caducidad: {FechaCaducidad.ToShortDateString()}");
         }
+
+        public static void NuevoTe (List<Producto> stock)
+        {
+        AnsiConsole.MarkupLine("[bold blue]--- AÑADIENDO NUEVO TÉ ---[/]");
+
+        int id = stock.Count + 1;
+        string nombre = AnsiConsole.Ask<string>("Nombre del té:");
+        string origen = AnsiConsole.Ask<string>("Origen:");
+        decimal precio = AnsiConsole.Ask<decimal>("Precio/kg:");
+        int cantidad = AnsiConsole.Ask<int>("Cantidad/gramos:");
+        bool esOrganico = AnsiConsole.Confirm("¿Es orgánico?");
+        string tipoHoja = AnsiConsole.Ask<string>("Tipo:");
+        DateTime caducidad = AnsiConsole.Ask<DateTime>("Fecha de caducidad (dd/mm/aaaa):");
+        
+        stock.Add(new Te(id, nombre, origen, precio, cantidad, esOrganico, tipoHoja, caducidad));
+        AnsiConsole.MarkupLine("[green]Té añadido correctamente.[/]");
+        }
     }    
 
     public class Comida : Producto
@@ -72,6 +90,23 @@ namespace TeaShop.Models
             string glutenStatus = ContieneGluten ? "Sí" : "No";
             Console.WriteLine($"Comida: {Nombre} | Origen: {Origen} | Tipo de Comida: {TipoComida} | Precio: ${Precio} por kg | Orgánico: {organicoStatus} | Contiene Gluten: {glutenStatus} | Stock: {Stock}g | Caducidad: {FechaCaducidad.ToShortDateString()}");
         }
-    }
-       
+
+        public static void NuevaComida (List<Producto> stock)
+        {
+        Console.WriteLine("[bold blue]--- AÑADIENDO NUEVA COMIDA ---[/]");
+
+        int id = stock.Count + 1;
+        string nombre = AnsiConsole.Ask<string>("Nombre de la comida:");
+        string origen = AnsiConsole.Ask<string>("Origen:");
+        decimal precio = AnsiConsole.Ask<decimal>("Precio/kg:");
+        int cantidad = AnsiConsole.Ask<int>("Cantidad/gramos:");
+        bool esOrganico = AnsiConsole.Confirm("¿Es orgánico?");
+        string tipoComida = AnsiConsole.Ask<string>("Tipo de comida:");
+        bool contieneGluten = AnsiConsole.Confirm("¿Contiene gluten?");
+        DateTime FechaCaducidad = AnsiConsole.Ask<DateTime>("Fecha de caducidad (dd/mm/aaaa):");
+        
+        stock.Add(new Comida(id, nombre, origen, precio, cantidad, esOrganico, tipoComida, contieneGluten, FechaCaducidad));
+        AnsiConsole.MarkupLine("[green]Comida añadida correctamente.[/]");
+        }
+    }    
 } 

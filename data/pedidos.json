@@ -1,0 +1,24 @@
+[
+  {
+    "Id": 1,
+    "UsuarioId": 2,
+    "Fecha": "2026-01-09T18:10:14.307423+01:00",
+    "PrecioTotal": 6.5500,
+    "Estado": 0,
+    "EsRegalo": false,
+    "ListaProductos": [
+      {
+        "ProductoId": 6,
+        "Nombre": "Cookie de Avena",
+        "Cantidad": 350,
+        "Precio": 17.80
+      },
+      {
+        "ProductoId": 2,
+        "Nombre": "T\u00E9 Chai",
+        "Cantidad": 10,
+        "Precio": 32.00
+      }
+    ]
+  }
+]

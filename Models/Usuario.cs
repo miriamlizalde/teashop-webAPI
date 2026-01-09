@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Spectre.Console;
 
 namespace TeaShop.Models
 
@@ -28,6 +31,20 @@ namespace TeaShop.Models
         public void MostrarDetalles() {
             string socioStatus = EsSocio ? "Sí" : "No";
             Console.WriteLine($"Usuario: {Nombre} | Email: {Email} | Socio: {socioStatus} | Saldo: ${Saldo:F2} | Fecha de Registro: {FechaRegistro.ToShortDateString()}");
+        }
+
+        public static void NuevoUsuario(List<Usuario> usuarios)
+        {
+            AnsiConsole.MarkupLine("[bold blue]--REGISTRAR USUARIO--[/]");
+            int id = usuarios.Any() ? usuarios.Max(u => u.Id) + 1 : 1;
+
+            string nombre = AnsiConsole.Ask<string>("Nombre del usuario:");
+            string email = AnsiConsole.Ask<string>("Email:");
+            string password = AnsiConsole.Ask<string>("Contraseña:");
+            bool esSocio = AnsiConsole.Confirm("¿Es socio?");
+
+            usuarios.Add(new Usuario(id, nombre, email, password, esSocio));
+            AnsiConsole.MarkupLine("[green]Usuario creado con éxito.[/]");
         }
     }
 }

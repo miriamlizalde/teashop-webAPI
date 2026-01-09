@@ -9,6 +9,7 @@ class Program
 {
     static List<Producto> stock = new List<Producto>();
     static List<Usuario> usuarios = new List<Usuario>();
+    static List<Pedido> pedidos = new List<Pedido>();
     static Usuario? usuarioIdentificado = null;
 
     static void Main(string[] args)
@@ -23,36 +24,36 @@ class Program
         while (!salir)
         {
             Console.Clear();
-            AnsiConsole.Write(new FigletText("TeaShop").Centered().Color(Color.LightGreen));
+            AnsiConsole.Write(new FigletText("TeaShop").Centered().Color(Color.Green));
 
             var opcion = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("[yellow]Selecciona una opción:[/]")
                     .PageSize(10)
                     .AddChoices(new[] {
-                        "Ver Catálogo (Zona Pública)", 
+                        "Ver Catálogo", 
                         "Buscar Producto",
-                        "Identificarse / Registrarse", 
-                        "Zona Privada (Mis Pedidos)", 
-                        "Gestión Admin (Altas)",
+                        "Iniciar sesión", 
+                        "Mi perfil", 
+                        "Gestión TeaShop - Admin",
                         "Salir"
                     }));
 
             switch (opcion)
             {
-                case "Ver Catálogo (Zona Pública)":
+                case "Ver Catálogo":
                     MostrarCatalogo();
                     break;
                 case "Buscar Producto":
                     BuscarProducto();
                     break;
-                case "Identificarse / Registrarse":
+                case "Iniciar sesión":
                     Login();
                     break;
-                case "Zona Privada (Mis Pedidos)":
+                case "Mi perfil":
                     ZonaPrivada();
                     break;
-                case "Gestión Admin (Altas)":
+                case "Gestión TeaShop - Admin":
                     Admin();
                     break;
                 case "Salir":
@@ -65,16 +66,30 @@ class Program
     // ZONA PÚBLICA
     static void MostrarCatalogo()
     {
-        var tabla = new Table().Border(TableBorder.Rounded);
+        var tabla = new Table().Border(TableBorder.Rounded).Title("[bold blue]-- CATÁLOGO DE PRODUCTOS --[/]");
         tabla.AddColumn("ID");
         tabla.AddColumn("Nombre");
+        tabla.AddColumn("Origen");
         tabla.AddColumn("Precio/kg");
         tabla.AddColumn("Tipo");
+        tabla.AddColumn("Orgánico");
+        tabla.AddColumn("Gluten");
+        tabla.AddColumn("Stock(g)");
+        tabla.AddColumn("Caducidad");
 
         foreach (var p in stock)
         {
             string tipo = p is Te ? "Té" : "Comida";
-            tabla.AddRow(p.Id.ToString(), p.Nombre, $"{p.Precio:F2}€", tipo);
+            tabla.AddRow(
+                p.Id.ToString(), 
+                p.Nombre,
+                p.Origen, 
+                $"{p.Precio:F2}€", 
+                tipo, 
+                p.EsOrganico ? "[green]Sí[/]" : "[red]No[/]",
+                p is Comida comida ? (comida.ContieneGluten ? "[green]Sí[/]" : "[red]No[/]") : "N/A",
+                p.Stock.ToString(), 
+                p.FechaCaducidad.ToShortDateString());
         }
         AnsiConsole.Write(tabla);
         AnsiConsole.MarkupLine("[white]Presiona cualquier tecla para continuar[/]");
@@ -110,28 +125,41 @@ class Program
 
         var subOpcion = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-                .Title("Gestión de Almacén")
-                .AddChoices(new[] { "Dar de alta Té", "Dar de alta Comida", "Volver" }));
+                .Title("[yellow]Gestión de TeaShop[/]")
+                .AddChoices(new[] { 
+                    "Dar de alta Té", 
+                    "Dar de alta Comida",
+                    "Dar de alta Usuario",
+                    "Añadir Pedido a Usuario",
+                    "Ver Usuarios", 
+                    "Volver" 
+                    }));
 
-        if (subOpcion == "Volver") return;
-
-        int id = stock.Count + 1;
-        string nombre = AnsiConsole.Ask<string>("Nombre del producto:");
-        decimal precio = AnsiConsole.Ask<decimal>("Precio:");
-
-        if (subOpcion == "Dar de alta Té")
+        switch (subOpcion)
         {
-            string tipoHoja = AnsiConsole.Ask<string>("Tipo de hoja:");
-            stock.Add(new Te(id, nombre, "Importación", precio, 1000, true, tipoHoja, null));
+            case "Dar de alta Té":
+                Te.NuevoTe(stock);
+                TeashopManager.GuardarDatos(stock, "productos.json");
+                break;
+            case "Dar de alta Comida":
+                Comida.NuevaComida(stock);
+                TeashopManager.GuardarDatos(stock, "productos.json");
+                break;
+            case "Dar de alta Usuario":
+                Usuario.NuevoUsuario(usuarios);
+                TeashopManager.GuardarDatos(usuarios, "usuarios.json");
+                break;
+            case "Añadir Pedido a Usuario":
+                Pedido.NuevoPedido(usuarios, stock, pedidos);
+                TeashopManager.GuardarDatos(pedidos, "pedidos.json");
+                TeashopManager.GuardarDatos(usuarios, "usuarios.json");
+                break;
+            case "Ver Usuarios":
+                ListaUsuarios();
+                break;
+            case "Volver":
+                break;
         }
-        else
-        {
-         stock.Add(new Comida(id, nombre, "Local", precio, 50, false, "Reposteria", false, null));
-        }
-
-        TeashopManager.GuardarDatos (stock, "productos.json");
-        AnsiConsole.MarkupLine("[green]Producto guardado con éxito.[/]");
-        Console.ReadKey();
     }
 
     // ZONA PRIVADA
@@ -143,8 +171,22 @@ class Program
         }
         else
         {
-            AnsiConsole.MarkupLine($"[blue]Bienvenido a tu perfil, {usuarioIdentificado.Nombre}[/]");
+            AnsiConsole.MarkupLine($"[bold blue]BIENVENIDO A TU PERFIL, {usuarioIdentificado.Nombre}[/]");
             usuarioIdentificado.MostrarDetalles();
+            AnsiConsole.MarkupLine("\n[blue]-- TUS PEDIDOS --[/]");
+            var misPedidos = pedidos.Where(p => p.UsuarioId == usuarioIdentificado.Id).ToList();
+
+            if (misPedidos.Any())
+            {
+                foreach (var pedido in misPedidos)
+                {
+                    pedido.MostrarPedido();
+                }
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[grey]No tienes pedidos realizados.[/]");
+            }
     
         }
         Console.ReadKey();
@@ -152,19 +194,34 @@ class Program
 
     static void Login()
     {
+        AnsiConsole.MarkupLine("[bold blue]-- IDENTIFICACIÓN --[/]");
         string nombre = AnsiConsole.Ask<string>("Nombre de usuario:");
-        usuarioIdentificado = usuarios.FirstOrDefault(u => u.Nombre == nombre);
+        var existeUsuario = usuarios.FirstOrDefault(u => u.Nombre.Equals(nombre, StringComparison.OrdinalIgnoreCase));
         
-        if (usuarioIdentificado == null)
+        if (existeUsuario == null)
         {
-            usuarioIdentificado = new Usuario(usuarios.Count + 1, nombre, $"{nombre}@gmail.com", "1234", false);
-            usuarios.Add(usuarioIdentificado);
-            TeashopManager.GuardarDatos(usuarios, "usuarios.json");
-            AnsiConsole.MarkupLine("[green]Nuevo usuario registrado.[/]");
+            AnsiConsole.MarkupLine("[red]El usuario no existe.[/]");
+   
         }
         else
         {
-            AnsiConsole.MarkupLine($"[green]¡Bienvenido, {usuarioIdentificado.Nombre}![/]");
+            string pass = AnsiConsole.Prompt(
+                new TextPrompt<string>("Contraseña:")
+                    .PromptStyle("red")
+                    .Secret());
+
+            if (existeUsuario.Password == pass)
+            {
+                usuarioIdentificado = existeUsuario;
+                AnsiConsole.MarkupLine($"[green]¡Bienvenido, {usuarioIdentificado.Nombre}![/]");
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[red]Contraseña incorrecta.[/]");
+                Console.ReadKey();
+                return;
+            }        
+            
         }
         Console.ReadKey();
     }
@@ -175,18 +232,19 @@ class Program
         {
             stock = TeashopManager.CargarDatos<Producto>("productos.json");
             usuarios = TeashopManager.CargarDatos<Usuario>("usuarios.json");
+            pedidos = TeashopManager.CargarDatos<Pedido>("pedidos.json");
 
             if (!stock.Any())
             {
                 stock.Add(new Te(1, "Té Matcha", "Japón", 50.5m, 1000, true, "Verde"));
                 stock.Add(new Te(2, "Té Chai", "India", 32.00m, 10000, false, "Negro"));
-                stock.Add(new Te(2, "Té Puerh", "China", 22.00m, 10000, false, "Rojo"));
-                stock.Add(new Te(2, "Té Oolong", "China", 45.00m, 1500, true, "Azul"));
+                stock.Add(new Te(3, "Té Puerh", "China", 22.00m, 10000, false, "Rojo"));
+                stock.Add(new Te(4, "Té Oolong", "China", 45.00m, 1500, true, "Azul"));
 
-                stock.Add(new Comida(2, "Tarta de Pistacho", "España", 5.0m, 350, false, "Dulce", true));
-                stock.Add(new Comida(4, "Cookie de Avena", "España", 1.80m, 50, true, "Dulce", false));
-                stock.Add(new Comida(5, "Sándwich Vegetal", "Francia", 3.50m, 80, false, "Salado", true));
-                stock.Add(new Comida(6, "Wrap de Pollo", "Reino Unido", 2.20m, 120, true, "Salado", false));
+                stock.Add(new Comida(5, "Tarta de Pistacho", "España", 25.0m, 5000, false, "Dulce", true));
+                stock.Add(new Comida(6, "Cookie de Avena", "España", 17.80m, 2500, true, "Dulce", false));
+                stock.Add(new Comida(7, "Sándwich Vegetal", "Francia", 23.50m, 2200, false, "Salado", true));
+                stock.Add(new Comida(8, "Wrap de Pollo", "Reino Unido", 20.20m, 6400, true, "Salado", false));
                 
                 TeashopManager.GuardarDatos(stock, "productos.json");
             }
@@ -203,5 +261,26 @@ class Program
         {
             TeashopManager.GuardarLog(ex.Message);
         }
+    }    
+    
+    static void ListaUsuarios()
+    {
+        var tabla = new Table().Border(TableBorder.Rounded).Title("[bold blue]-- CLIENTES REGISTRADOS --[/]");
+        tabla.AddColumn("ID");
+        tabla.AddColumn("Nombre");
+        tabla.AddColumn("Email");
+        tabla.AddColumn("Saldo");
+        tabla.AddColumn("Es Admin");
+        tabla.AddColumn("Socio");
+
+        foreach (var u in usuarios){
+            string esAdmin = u.EsAdmin ? "[yellow]SÍ[/]" : "No";
+            string esSocio = u.EsSocio ? "[blue]SÍ[/]" : "No";
+        
+            tabla.AddRow(u.Id.ToString(), u.Nombre, u.Email, u.Saldo.ToString("F2")+" Euros", esAdmin, esSocio);
+        }
+        AnsiConsole.Write(tabla);
+        Console.ReadKey();
     }
+       
 }

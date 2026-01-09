@@ -8,5 +8,35 @@
     "Saldo": 0,
     "EsSocio": true,
     "EsAdmin": true
+  },
+  {
+    "Id": 2,
+    "Nombre": "Miriam",
+    "Email": "Miriam@gmail.com",
+    "Password": "1234",
+    "FechaRegistro": "2026-01-09T12:24:42.69037+01:00",
+    "Saldo": 0,
+    "EsSocio": false,
+    "EsAdmin": false
+  },
+  {
+    "Id": 3,
+    "Nombre": "Admin",
+    "Email": "Admin@gmail.com",
+    "Password": "1234",
+    "FechaRegistro": "2026-01-09T12:25:18.89927+01:00",
+    "Saldo": 0,
+    "EsSocio": false,
+    "EsAdmin": false
+  },
+  {
+    "Id": 4,
+    "Nombre": "Usuario Prueba",
+    "Email": "usuario23@gmail.com",
+    "Password": "1111",
+    "FechaRegistro": "2026-01-09T18:46:22.915437+01:00",
+    "Saldo": 0,
+    "EsSocio": true,
+    "EsAdmin": false
   }
 ]
