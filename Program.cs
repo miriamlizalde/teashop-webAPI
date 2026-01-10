@@ -24,7 +24,9 @@ class Program
         while (!salir)
         {
             Console.Clear();
-            AnsiConsole.Write(new FigletText("TeaShop").Centered().Color(Color.Green));
+
+            string nombreTienda = Environment.GetEnvironmentVariable("NOMBRE_TIENDA") ?? "TeaShop";
+            AnsiConsole.Write(new FigletText(nombreTienda).Centered().Color(Color.Green));
 
             var opcion = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
