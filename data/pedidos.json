@@ -49,5 +49,26 @@
         "Precio": 25.0
       }
     ]
+  },
+  {
+    "Id": 4,
+    "UsuarioId": 4,
+    "Fecha": "2026-01-21T19:37:48.102833+01:00",
+    "PrecioTotal": 0.64400,
+    "Estado": 0,
+    "ListaProductos": [
+      {
+        "ProductoId": 3,
+        "Nombre": "T\u00E9 Puerh",
+        "Cantidad": 5,
+        "Precio": 22.00
+      },
+      {
+        "ProductoId": 6,
+        "Nombre": "Cookie de Avena",
+        "Cantidad": 30,
+        "Precio": 17.80
+      }
+    ]
   }
 ]

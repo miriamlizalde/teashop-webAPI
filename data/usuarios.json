@@ -15,7 +15,7 @@
     "Email": "Miriam@gmail.com",
     "Password": "1234",
     "FechaRegistro": "2026-01-09T12:24:42.69037+01:00",
-    "Saldo": 20.00,
+    "Saldo": 50.00,
     "EsSocio": false,
     "EsAdmin": false
   },
@@ -35,6 +35,16 @@
     "Email": "usuario23@gmail.com",
     "Password": "1111",
     "FechaRegistro": "2026-01-09T18:46:22.915437+01:00",
+    "Saldo": 0,
+    "EsSocio": true,
+    "EsAdmin": false
+  },
+  {
+    "Id": 5,
+    "Nombre": "Juann",
+    "Email": "juan@gmail.com",
+    "Password": "1111",
+    "FechaRegistro": "2026-01-21T19:37:38.495584+01:00",
     "Saldo": 0,
     "EsSocio": true,
     "EsAdmin": false

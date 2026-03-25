@@ -113,7 +113,7 @@ namespace TeaShop.Models
     public class ItemPedido 
     {
         public int ProductoId { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
         public double Cantidad { get; set; }
         public decimal Precio { get; set; }
     }

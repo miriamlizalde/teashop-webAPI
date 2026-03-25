@@ -19,7 +19,7 @@ COPY --from=build /app/out .
 EXPOSE 7863
 
 # Variable de entorno 
-ENV NOMBRE_TIENDA="TeaShop"
+ENV NOMBRE_TIENDA="Tetería"
 
 # Ejecutar la aplicación
 ENTRYPOINT ["dotnet", "TeaShop.dll"]
