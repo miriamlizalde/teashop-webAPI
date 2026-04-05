@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using TeaShop.Data;
 using TeaShop.Business;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
@@ -20,7 +21,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience            = builder.Configuration["JWT:ValidAudience"],
             IssuerSigningKey         = new SymmetricSecurityKey(
                 System.Text.Encoding.UTF8.GetBytes(
-                    builder.Configuration["JWT:SecretKey"]))
+                    builder.Configuration["JWT:SecretKey"])),
+            RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+            NameClaimType            = "unique_name"
         };
     });
 
