@@ -1,0 +1,41 @@
+version: '3.4'
+
+networks: 
+  backend:
+
+volumes:
+  sqlserver-data:
+    driver: local
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
+    ports:
+      - 3687:1433
+    networks:
+      - backend
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=TeaShop_Pass123!
+      - MSSQL_PID=Developer
+
+  api:
+    ports:
+      - 7863:8080  
+    networks:
+      - backend
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__ServerDB_localhost=Server=db,1433;Database=TeaShopDB;User Id=sa;Password=TeaShop_Pass123!;TrustServerCertificate=True
+      - JWT__ValidAudience=https://localhost:7863
+      - JWT__ValidIssuer=https://localhost:7863
+      - JWT__SecretKey=JWTSecretKeyTeaShop@2026JWTSecretKeyTeaShop@2026!
+  

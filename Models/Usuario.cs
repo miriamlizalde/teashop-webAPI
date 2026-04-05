@@ -1,5 +1,5 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeaShop.Models;
 
@@ -10,6 +10,7 @@ public class Usuario
     public string Email { get; set; } 
     public string Password { get; set; } 
     public DateTime FechaRegistro { get; set; }
+    [Column(TypeName = "decimal(10,2)")]
     public decimal Saldo { get; set; } = 0;
     public bool EsSocio { get; set; }
     public string Rol { get; set; }   
