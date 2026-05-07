@@ -4,6 +4,8 @@ namespace TeaShop.Models;
 
 public class PedidoQueryParameters
 {
+    public int? UsuarioId { get; set; }
+    
     [RegularExpression(@"^(Pendiente|Entregado|Cancelado)$", ErrorMessage = "El estado del pedido debe ser Pendiente, Entregado o Cancelado.")]
     public string? Estado { get; set; }
 

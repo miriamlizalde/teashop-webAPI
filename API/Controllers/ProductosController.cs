@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using TeaShop.Business;
 using TeaShop.Models;
 
@@ -12,12 +13,14 @@ namespace TeaShop.API.Controllers
     {
         private readonly ILogger<ProductosController> _logger;
         private readonly IProductoService _productoService;
+        private readonly IAuthService _authService;
+        private readonly IImageService _imageService;
 
-        public ProductosController(ILogger<ProductosController> logger,
-                                   IProductoService productoService)
+        public ProductosController(ILogger<ProductosController> logger, IProductoService productoService, IImageService imageService)
         {
             _logger          = logger;
             _productoService = productoService;
+            _imageService    = imageService;
         }
 
         // GET: /Productos
@@ -60,36 +63,29 @@ namespace TeaShop.API.Controllers
         // POST: /Productos
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
-        public IActionResult AddProducto([FromBody] CrearProductoDTO productoDTO)
+        public async Task <IActionResult> AddProducto([FromForm] CrearProductoDTO productoDTO)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
             try
             {
-                _productoService.AddProducto(productoDTO);
+                await _productoService.AddProducto(productoDTO);
                 return Ok("Producto creado correctamente.");
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            catch (ArgumentException ex) { return BadRequest(ex.Message); }
+            catch (Exception ex) { return BadRequest(ex.Message); }
         }
 
         // PUT: /Productos/5
         [HttpPut("{productoId}")]
         [Authorize(Roles = Roles.Admin)]
-        public IActionResult UpdateProducto(int productoId,
-                                            [FromBody] CrearProductoDTO productoDTO)
+        public async Task<IActionResult> UpdateProducto(int productoId, [FromForm] CrearProductoDTO productoDTO)
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
             try
             {
-                _productoService.UpdateProducto(productoId, productoDTO);
+                await _productoService.UpdateProducto(productoId, productoDTO);
                 return NoContent();
             }
             catch (KeyNotFoundException)

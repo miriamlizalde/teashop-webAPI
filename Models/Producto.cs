@@ -15,6 +15,7 @@ public abstract class Producto
         public int Stock { get; set; }
         public bool EsOrganico { get; set; }
         public DateTime FechaCaducidad { get; set; }
+        public string? ImagenUrl { get; set; }
 
        public List<ItemPedido> ItemPedido { get; set; } = new List<ItemPedido>();
     }

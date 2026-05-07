@@ -1,13 +1,27 @@
 using System.IdentityModel.Tokens.Jwt;
 using TeaShop.Data;
 using TeaShop.Business;
+using TeaShop.Business.Services;
+using TeaShop.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowWeb", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
@@ -27,7 +41,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-    builder.Services.AddScoped<IAuthService,     AuthService>();
+builder.Services.AddScoped<IAuthService,     AuthService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IUsuarioService,  UsuarioService>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
@@ -40,7 +54,15 @@ builder.Services.AddDbContext<TeashopContext>(options =>
     options.UseSqlServer(connectionString)
 );    
 
-builder.Services.AddControllers();
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IImageService, CloudinaryImageService>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
@@ -77,6 +99,8 @@ var app = builder.Build();
     app.UseSwaggerUI(); 
 }
 
+app.UseRouting();
+app.UseCors("AllowWeb");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

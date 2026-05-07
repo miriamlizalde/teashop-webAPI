@@ -7,8 +7,8 @@ namespace TeaShop.Business
         IEnumerable<Producto> GetAllProductos(ProductoQueryParameters? queryParameters = null);
         Producto GetProducto(int productoId);
         
-        void AddProducto(CrearProductoDTO productoDTO);
-        void UpdateProducto(int productoId, CrearProductoDTO productoDTO);
+        Task AddProducto(CrearProductoDTO productoDTO);
+        Task UpdateProducto(int productoId, CrearProductoDTO productoDTO);
         void DeleteProducto(int productoId);
     }
 }

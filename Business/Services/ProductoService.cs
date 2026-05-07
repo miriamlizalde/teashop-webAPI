@@ -1,15 +1,17 @@
 using TeaShop.Data;
 using TeaShop.Models;
 
-namespace TeaShop.Business;
+namespace TeaShop.Business.Services;
 
 public class ProductoService : IProductoService
 {
     private readonly IProductoRepository _repository;
+    private readonly IImageService _imageService;
 
-    public ProductoService(IProductoRepository repository)
+    public ProductoService(IProductoRepository repository, IImageService imageService)
     {
         _repository = repository;
+        _imageService = imageService;
     }
 
     public IEnumerable<Producto> GetAllProductos(ProductoQueryParameters? queryParameters)
@@ -24,9 +26,10 @@ public class ProductoService : IProductoService
         return producto;
     }
 
-    public void AddProducto(CrearProductoDTO dto)
+    public async Task AddProducto(CrearProductoDTO dto)
     {
         if (dto.Precio < 0) throw new ArgumentException("El precio no puede ser negativo");
+
         Producto producto;
         if (dto.Tipo == "Te")
             {
@@ -48,6 +51,9 @@ public class ProductoService : IProductoService
                 throw new ArgumentException("El tipo de producto debe ser 'Te' o 'Comida'.");
             }
 
+            if (dto.Imagen != null && dto.Imagen.Length > 0)
+            {producto.ImagenUrl = await _imageService.UploadImageAsync(dto.Imagen);}
+
             producto.Nombre = dto.Nombre;
             producto.Origen = dto.Origen;
             producto.Precio = dto.Precio;
@@ -55,11 +61,12 @@ public class ProductoService : IProductoService
             producto.EsOrganico = dto.EsOrganico;
             producto.FechaCaducidad = dto.FechaCaducidad ?? DateTime.Now.AddMonths(1); 
         
+        
         _repository.AddProducto(producto);
         _repository.SaveChanges();
     }
 
-    public void UpdateProducto(int productoId, CrearProductoDTO dto)
+    public async Task UpdateProducto(int productoId, CrearProductoDTO dto)
     {
         var producto = _repository.GetProducto(productoId);
         if (producto == null) throw new KeyNotFoundException("Producto no encontrado");
@@ -79,6 +86,7 @@ public class ProductoService : IProductoService
             if (dto.TipoComida != null) comida.TipoComida = dto.TipoComida;
             comida.Gluten = dto.Gluten ?? false;
         }
+        if (dto.Imagen != null && dto.Imagen.Length > 0) {producto.ImagenUrl = await _imageService.UploadImageAsync(dto.Imagen);}
         _repository.UpdateProducto(producto);
         _repository.SaveChanges();
     }

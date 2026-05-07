@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using TeaShop.Business;
 using TeaShop.Models;
@@ -39,9 +40,29 @@ namespace TeaShop.API.Controllers
                         c => c.Type == ClaimTypes.NameIdentifier);
                     if (claim != null) usuarioId = int.Parse(claim.Value);
                 }
+                else if (queryParameters.UsuarioId.HasValue == true)
+                {
+                    usuarioId = queryParameters.UsuarioId;
+                }
 
                 var pedidos = _pedidoService.GetAllPedidos(queryParameters, usuarioId);
-                return Ok(pedidos);
+                var result = pedidos.Select(p => new PedidoDTO
+                {
+                    PedidoId = p.PedidoId,
+                    UsuarioId = p.UsuarioId,
+                    NombreUsuario = p.Usuario?.Nombre ?? string.Empty,
+                    Fecha = p.Fecha,
+                    PrecioTotal = p.PrecioTotal,
+                    Estado = p.Estado,
+                    Items = p.Items.Select(i => new ItemPedidoDTO
+                    {
+                        ProductoId = i.ProductoId,
+                        NombreProducto = i.Producto?.Nombre ?? string.Empty,
+                        Cantidad = i.Cantidad,
+                        Precio = i.Precio
+                    }).ToList()
+                });
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -65,7 +86,23 @@ namespace TeaShop.API.Controllers
                 }
 
                 var pedido = _pedidoService.GetPedido(pedidoId, usuarioId);
-                return Ok(pedido);
+                var result = new PedidoDTO
+                {
+                    PedidoId = pedido.PedidoId,
+                    UsuarioId = pedido.UsuarioId,
+                    NombreUsuario = pedido.Usuario?.Nombre ?? string.Empty,
+                    Fecha = pedido.Fecha,
+                    PrecioTotal = pedido.PrecioTotal,
+                    Estado = pedido.Estado,
+                    Items = pedido.Items.Select(i => new ItemPedidoDTO
+                    {
+                        ProductoId = i.ProductoId,
+                        NombreProducto = i.Producto?.Nombre ?? string.Empty,
+                        Cantidad = i.Cantidad,
+                        Precio = i.Precio
+                    }).ToList()
+                };
+                return Ok(result);
             }
             catch (KeyNotFoundException)
             {

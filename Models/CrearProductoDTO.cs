@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace TeaShop.Models;
 public class CrearProductoDTO
@@ -16,9 +17,8 @@ public class CrearProductoDTO
     public bool EsOrganico { get; set; }
     [Required]
     public DateTime? FechaCaducidad { get; set; }
-
     public string? TipoHoja { get; set; }
-
     public string? TipoComida { get; set; }
     public bool? Gluten { get; set; }
+    public IFormFile? Imagen { get; set; }
 }
