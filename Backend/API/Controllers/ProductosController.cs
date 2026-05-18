@@ -34,7 +34,22 @@ namespace TeaShop.API.Controllers
             try
             {
                 var productos = _productoService.GetAllProductos(queryParameters);
-                return Ok(productos);
+                var result = productos.Select(p => new ProductoDTO
+                {
+                    ProductoId = p.ProductoId,
+                    Nombre = p.Nombre,
+                    Origen = p.Origen,
+                    Precio = p.Precio,
+                    Stock = p.Stock,
+                    EsOrganico = p.EsOrganico,
+                    FechaCaducidad = p.FechaCaducidad,
+                    TipoProducto = p is Te ? "Te" : "Comida",
+                    TipoHoja = p is Te te ? te.TipoHoja : null,
+                    TipoComida = p is Comida c ? c.TipoComida : null,
+                    Gluten = p is Comida comida ? comida.Gluten : null,
+                    ImagenUrl = p.ImagenUrl
+                });
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -50,9 +65,23 @@ namespace TeaShop.API.Controllers
             try
             {
                 if (!ModelState.IsValid) { return BadRequest(ModelState); }
-
                 var producto = _productoService.GetProducto(productoId);
-                return Ok(producto);
+                var result = new ProductoDTO
+                {
+                    ProductoId = producto.ProductoId,
+                    Nombre = producto.Nombre,
+                    Origen = producto.Origen,
+                    Precio = producto.Precio,
+                    Stock = producto.Stock,
+                    EsOrganico = producto.EsOrganico,
+                    FechaCaducidad = producto.FechaCaducidad,
+                    TipoProducto = producto is Te ? "Te" : "Comida",
+                    TipoHoja = producto is Te te ? te.TipoHoja : null,
+                    TipoComida = producto is Comida c ? c.TipoComida : null,
+                    Gluten = producto is Comida comida ? comida.Gluten : null,
+                    ImagenUrl = producto.ImagenUrl
+                };
+                return Ok(result);
             }
             catch (KeyNotFoundException)
             {

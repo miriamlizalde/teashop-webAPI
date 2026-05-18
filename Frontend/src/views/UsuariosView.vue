@@ -39,7 +39,7 @@
           <v-text-field label="Nombre" v-model="form.nombre" />
           <v-text-field label="Email" v-model="form.email" />
           <v-text-field label="Contraseña" type="password" v-model="form.password" />
-          <v-select :items="['usuario', 'admin']" label="Rol" v-model="form.rol" />
+          <v-checkbox label="¿Es socio?" v-model="form.esSocio" />/>  
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -67,7 +67,7 @@ const form = ref({
   nombre: '',
   email: '',
   password: '',
-  rol: 'usuario',
+  esSocio: false
 })
 
 onMounted(async () => {
@@ -82,7 +82,7 @@ onMounted(async () => {
 })
 
 function openDialog() {
-  form.value = { nombre: '', email: '', password: '', rol: 'usuario' }
+  form.value = { nombre: '', email: '', password: '', esSocio: false }
   dialog.value = true
 }
 
@@ -90,7 +90,12 @@ async function crearUsuario() {
   if (!form.value.nombre || !form.value.email || !form.value.password) return
   creando.value = true
   try {
-    await axios.post('http://localhost:7863/Auth/Register', form.value)
+    await axios.post('http://localhost:7863/Auth/Register', {
+      nombre: form.value.nombre,
+      email: form.value.email,
+      password: form.value.password,
+      esSocio: form.value.esSocio
+    })
     const response = await axios.get<User[]>('http://localhost:7863/Usuarios')
     usuarios.value = response.data
     dialog.value = false

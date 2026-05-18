@@ -115,6 +115,27 @@ namespace TeaShop.API.Controllers
                 return NotFound();
             }
         }
+
+        //PUT: /Usuarios/5
+        [HttpPut("{usuarioId}")]
+        [Authorize(Roles = Roles.Admin)]
+        public IActionResult UpdateUsuario(int usuarioId, [FromBody] UsuarioDtoIn usuarioDtoIn)
+        {
+            try
+            {
+                if (!ModelState.IsValid) { return BadRequest(ModelState); }
+                _usuarioService.UpdateUsuario(usuarioId, usuarioDtoIn);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("No encontrado el usuario " + usuarioId);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
      
     }
 }

@@ -18,6 +18,15 @@
         </v-chip>
       </v-card-text>
 
+    <v-card-text>
+      <h3 class="mb-2">Editar</h3>
+      <v-text-field label="Nombre" v-model="form.nombre" />
+      <v-text-field label="Email" v-model="form.email" />
+      <v-checkbox label="¿Es socio?" v-model="form.esSocio" />
+      <v-btn color="green-darken-1" @click="guardarCambios" :loading="guardando">Guardar</v-btn>
+      <v-alert v-if="error" type="error" class="mt-3">{{ error }}</v-alert>
+    </v-card-text>
+
       <v-card-text>
         <h3 class="mb-2">Añadir saldo</h3>
         <div class="d-flex gap-3 align-center">
@@ -36,7 +45,7 @@
       </v-card-actions>
     </v-card>
 
-    <!-- PEDIDOS DEL USUARIO -->
+    <!--Pedidos usuario-->
     <h3 class="text-h6 mb-3">Pedidos de {{ usuario?.nombre }}</h3>
     <div v-if="loadingPedidos">Cargando pedidos...</div>
     <v-alert v-else-if="pedidos.length === 0" tyoe="info">Este usuario no tiene pedidos.</v-alert>
@@ -71,6 +80,12 @@ const loadingPedidos = ref(true)
 const error = ref('')
 const cantSaldo = ref(0)
 const añadiendo = ref(false)
+const guardando = ref(false)
+const form = ref({
+  nombre: '',
+  email: '',
+  esSocio: false
+})
 
 
 onMounted(async () => {
@@ -78,6 +93,11 @@ onMounted(async () => {
     const id = Number(route.params.id)
     const response = await axios.get<User>(`http://localhost:7863/Usuarios/${id}`)
     usuario.value = response.data
+    form.value = {
+      nombre: response.data.nombre,
+      email: response.data.email,
+      esSocio: response.data.esSocio
+    }
     const resPedidos = await axios.get<Pedido[]>(`http://localhost:7863/Pedidos`, 
     { params: { usuarioId: id } })
     pedidos.value = resPedidos.data
@@ -88,6 +108,27 @@ onMounted(async () => {
     loadingPedidos.value = false
   }
 })
+
+async function guardarCambios() {
+  if (!usuario.value) return
+  guardando.value = true
+  try {
+    await axios.put(`http://localhost:7863/Usuarios/${usuario.value.usuarioId}`, {
+      nombre: form.value.nombre,
+      email: form.value.email,
+      esSocio: form.value.esSocio,
+      password: '...',
+      rol: usuario.value.rol,
+    })
+    usuario.value.nombre = form.value.nombre
+    usuario.value.email = form.value.email
+    usuario.value.esSocio = form.value.esSocio
+  } catch (err) {
+    error.value = 'No se pudieron guardar los cambios.'
+  } finally {
+    guardando.value = false
+  }
+}
 
 async function addSaldo() {
   if (!usuario.value || cantSaldo.value <= 0) return

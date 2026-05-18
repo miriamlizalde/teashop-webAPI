@@ -19,8 +19,9 @@ export interface Producto {
 const baseURL = 'http://localhost:7863'
 
 function tipoProducto(p: any): string {
-  if (p.tipoHoja !== undefined && p.tipoHoja !== null) return 'Te'
-  if (p.tipoComida !== undefined && p.tipoComida !== null) return 'Comida'
+  console.log('producto:', p.nombre, '| tipoHoja:', p.tipoHoja, '| tipoComida:', p.tipoComida)
+  if (p.tipoHoja !== undefined && p.tipoHoja !== null && p.tipoHoja !== '') return 'Te'
+  if (p.tipoComida !== undefined && p.tipoComida !== null && p.tipoComida !== '') return 'Comida'
   return 'Te'
 }
 
