@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  frontend:
+    build: ./Frontend
+    container_name: teashop-frontend
+    ports:
+      - "80:80"
+
+  api:
+    build: 
+      context: ./Backend
+      dockerfile: API/Dockerfile
+    container_name: teashop-api
+    ports:
+      - "7863:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__ServerDB_localhost=Server=db,1433;Database=TeaShopDB;User Id=sa;Password=TeaShop_Pass123!;TrustServerCertificate=True
+      - JWT__ValidAudience=https://localhost:7863
+      - JWT__ValidIssuer=https://localhost:7863
+      - JWT__SecretKey=JWTSecretKeyTeaShop@2026JWTSecretKeyTeaShop@2026!
