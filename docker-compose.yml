@@ -14,9 +14,9 @@ services:
     container_name: teashop-api
     ports:
       - "7863:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__ServerDB_localhost=Server=db,1433;Database=TeaShopDB;User Id=sa;Password=TeaShop_Pass123!;TrustServerCertificate=True
-      - JWT__ValidAudience=https://localhost:7863
-      - JWT__ValidIssuer=https://localhost:7863
-      - JWT__SecretKey=JWTSecretKeyTeaShop@2026JWTSecretKeyTeaShop@2026!
+environment:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ConnectionStrings__ServerDB_localhost: "Server=teashop-db.cmiy20xvmguv.us-east-1.rds.amazonaws.com,1433;Database=TeaShopDB;User Id=sa;Password=TeaShop_Pass123!;TrustServerCertificate=True"
+  JWT__ValidAudience: "https://localhost:7863"
+  JWT__ValidIssuer: "https://localhost:7863"
+  JWT__SecretKey: "JWTSecretKeyTeaShop@2026JWTSecretKeyTeaShop@2026!"
