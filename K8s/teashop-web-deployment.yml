@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: teashop-web-svc
+spec:
+  selector:
+    app: teashop-web 
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80 
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teashop-web-deploy
+  labels:
+    app: teashop-web
+spec:
+  replicas: 2  
+  selector:
+    matchLabels:
+      app: teashop-web
+  template:
+    metadata:
+      labels:
+        app: teashop-web
+    spec:
+      containers:
+      - name: teashop-web
+        image: miriamlizalde/teashop:web-v1 
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "80m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"

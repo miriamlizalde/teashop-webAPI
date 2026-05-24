@@ -1,0 +1,46 @@
+ata:
+  name: teashop-web-svc-https
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: <ARN>
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+spec:
+  selector:
+    app: teashop-web-https
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+  - name: https
+    port: 443
+    targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teashop-web-deploy-https
+  labels:
+    app: teashop-web-https
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: teashop-web-https
+  template:
+    metadata:
+      labels:
+        app: teashop-web-https
+    spec:
+      containers:
+      - name: teashop-web
+        image: miriamlizalde/teashop:web-v1
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "80m"
+          limits:
+            memory: "128Mi"
+            cpu: "250m"
