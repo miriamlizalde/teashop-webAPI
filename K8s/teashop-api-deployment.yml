@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: teashop-api-svc
+spec:
+  selector:
+    app: teashop-api
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080  
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teashop-api-deploy
+  labels:
+    app: teashop-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: teashop-api
+  template:
+    metadata:
+      labels:
+        app: teashop-api
+    spec:
+      containers:
+      - name: teashop-api
+        image: miriamlizalde/teashop:api-v1
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        env:    
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: ConnectionStrings__ServerDB_localhost
+          value: "Server=teashop-db.cmiy20xvmguv.us-east-1.rds.amazonaws.com,1433;Database=TeaShopDB;User Id=sa;Password=TeaShop_Pass123!;TrustServerCertificate=True"
+        - name: JWT__ValidIssuer
+          value: "https://localhost:7863"
+        - name: JWT__ValidAudience
+          value: "https://localhost:7863"
+        - name: JWT__SecretKey
+          value: "JWTSecretKeyTeaShop@2026JWTSecretKeyTeaShop@2026!"
